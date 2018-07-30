@@ -1,0 +1,24 @@
+# @Author: Arohi Gupta <agupta>
+# @Date:   2018-07-06T15:39:07-07:00
+# @Email:  agupta@juniper.net
+# @Last modified by:   agupta
+# @Last modified time: 2018-07-30T11:04:28-07:00
+
+# Projects: This is for creating projects in openstack.
+#   - name: HR-dev # add name of the project here.
+
+Projects:
+  - name: HR-dev
+  - name: HR-prod
+#  Modify this method FIXME
+#   - name: heat
+Users:
+  - name: heat
+  - name: neutron
+  - name: placement
+  - name: ironic
+  - name: swift
+  - name: barbican
+  - name: glance
+  - name: ironic-inspector
+  - name: nova

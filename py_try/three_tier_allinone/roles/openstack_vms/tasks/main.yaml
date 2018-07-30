@@ -1,0 +1,71 @@
+---
+- import_tasks: c_internet.yaml
+
+- name: Download ubuntu image
+  get_url:
+    url: http://10.87.129.3/pxe/Standard/dpdkvm/vin/x-traffic1.qcow2
+    dest: /tmp/x-traffic1.qcow2
+
+- name: Upload ubuntu image to openstack
+  os_image:
+    name: ubuntu
+    container_format: bare
+    disk_format: qcow2
+    state: present
+    filename: /tmp/x-traffic1.qcow2
+
+- name: Creating Regions.
+  os_nova_host_aggregate:
+    state: present
+    name: "{{ item.name }}"
+    availability_zone: "{{ item.availability_zone }}"
+    hosts:
+      - "{{item.hosts}}"
+  with_items: "{{ Region }}"
+
+- name: Create new keypair from current user's default SSH key
+  os_keypair:
+    state: present
+    name: ansible_key
+    public_key_file: "{{ '~' | expanduser }}/.ssh/id_rsa.pub"
+
+- name: "Create 'Small' flavor with 8192MB of RAM, 4 virtual CPU, and 50GB of local disk"
+  os_nova_flavor:
+    state: present
+    name: m1.small
+    ram: 8192
+    vcpus: 4
+    disk: 50
+    ephemeral: 0
+
+- name: Create server instances
+  ignore_errors: no
+  os_server:
+    state: present
+    auth:
+        project_name: "{{ item.project_name }}"
+    name: "{{ item.name }}"
+    image: ubuntu
+    flavor: m1.small
+    key_name: ansible_key
+    nics:
+      - net-name: "{{ item.net_name }}"
+      - project-name: "{{ item.project_name }}"
+    availability_zone: "{{item.a_zone}}"
+    wait: True
+  register: result_ips
+  with_items: "{{ Network_Data }}"
+  tags: new
+
+- name: setting facts
+  set_fact:
+      "{{item.openstack.name}}": "{{item.openstack.private_v4}}"
+  with_items: "{{ result_ips.results }}"
+  tags: new
+
+- name: "Sleep to sync vms"
+# Pause for 5 minutes to build app cache.
+  pause:
+    minutes: 5
+
+- import_tasks: internal_ips.yaml

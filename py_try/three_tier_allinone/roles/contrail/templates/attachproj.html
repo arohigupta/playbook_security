@@ -1,0 +1,38 @@
+{
+  "global-vrouter-config": {
+    "flow_export_rate": 0,
+    "flow_aging_timeout_list": {
+      "flow_aging_timeout": [
+        {
+          "timeout_in_seconds": 2147483647,
+          "protocol": "tcp",
+          "port": 9161
+        },
+        {
+          "timeout_in_seconds": 2147483647,
+          "protocol": "tcp",
+          "port": 5673
+        },
+        {
+          "timeout_in_seconds": 2147483647,
+          "protocol": "tcp",
+          "port": 8082
+        }
+      ]
+    },
+    "linklocal_services": {
+      "linklocal_service_entry": [
+        {
+          "linklocal_service_name": "Link Local Vrouter Agent",
+          "ip_fabric_service_ip": [
+            "127.0.0.1"
+          ],
+          "linklocal_service_ip": "10.10.10.1",
+          "ip_fabric_service_port": 9091,
+          "ip_fabric_DNS_service_name": "",
+          "linklocal_service_port": 9091
+        }
+      ]
+    }
+  }
+}

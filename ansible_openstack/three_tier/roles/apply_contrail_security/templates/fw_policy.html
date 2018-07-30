@@ -1,0 +1,60 @@
+{
+  "firewall-policy": {
+    "display_name": "{{item.display_name}}",
+    "parent_type": "policy-management",
+    "name": "{{item.display_name}}",
+    "firewall_rule_refs": [
+      {
+        "to": [
+          "default-policy-management",
+          "{{item.rule1}}"
+        ],
+        "attr": {
+          "sequence": "1"
+        }
+      },
+      {
+        "to": [
+          "default-policy-management",
+          "{{item.rule2}}"
+        ],
+        "attr": {
+          "sequence": "2"
+        }
+      },
+      {
+        "to": [
+          "default-policy-management",
+          "{{item.rule3}}"
+        ],
+        "attr": {
+          "sequence": "3"
+        }
+      },
+      {
+        "to": [
+          "default-policy-management",
+          "{{item.rule4}}"
+        ],
+        "attr": {
+          "sequence": "4"
+        }
+      }
+    ],
+    "application_policy_set_back_refs": [
+      {
+        "to": [
+          "default-policy-management",
+          "{{item.policy_set}}"
+        ],
+        "attr": {
+          "sequence": "0"
+        }
+      }
+    ],
+    "fq_name": [
+      "default-policy-management",
+      "{{item.display_name}}"
+    ]
+  }
+}

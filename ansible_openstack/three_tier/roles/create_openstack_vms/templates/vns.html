@@ -1,0 +1,46 @@
+{
+  "virtual-network": {
+    "parent_type": "project",
+    "fq_name": [
+      "default-domain",
+      "{{item.project}}",
+      "{{item.vn_name}}"
+    ],
+    "fabric_snat": true,
+    "tag_refs": [
+      {
+        "attr": "None",
+        "to": [
+          "tier={{item.tier}}"
+        ]
+      }
+    ],
+    "route_target_list": {
+      "route_target": [
+        "target:{{item.route_target}}"
+      ]
+    },
+    "network_ipam_refs": [
+      {
+        "to": [
+          "default-domain",
+          "{{item.project}}",
+          "{{item.ipam_name}}"
+        ],
+        "attr": {
+          "ipam_subnets": [
+            {
+              "subnet": {
+                "ip_prefix": "{{item.ip_prefix}}",
+                "ip_prefix_len": {{item.ip_prefix_len}}
+              },
+              "addr_from_start": true,
+              "enable_dhcp": true,
+              "default_gateway": "{{item.default_gateway}}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

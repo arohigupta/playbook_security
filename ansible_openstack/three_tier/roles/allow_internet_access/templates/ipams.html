@@ -1,0 +1,16 @@
+{
+  "network-ipam": {
+    "display_name": "{{item.ipam_name}}",
+    "ipam_subnet_method": "user-defined-subnet",
+    "parent_type": "project",
+    "name": "{{item.ipam_name}}",
+    "network_ipam_mgmt": {
+      "ipam_dns_method": "default-dns-server"
+    },
+    "fq_name": [
+      "default-domain",
+      "{{item.project}}",
+      "{{item.ipam_name}}"
+    ]
+  }
+}

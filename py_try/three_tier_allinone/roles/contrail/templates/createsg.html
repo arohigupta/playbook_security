@@ -1,0 +1,63 @@
+{
+  "service-group": {
+    "display_name": "{{item.name}}",
+    "parent_type": "policy-management",
+    "name": "{{item.name}}",
+    "fq_name": [
+      "default-policy-management",
+      "{{item.name}}"
+    ],
+    "service_group_firewall_service_list": {
+      "firewall_service": [
+        {
+          "protocol": "tcp",
+          "dst_ports": {
+            "end_port": 22,
+            "start_port": 22
+          },
+          "src_ports": {
+            "end_port": 65535,
+            "start_port": 0
+          },
+          "protocol_id": 6
+        },
+        {
+          "protocol": "tcp",
+          "dst_ports": {
+            "end_port": 23,
+            "start_port": 23
+          },
+          "src_ports": {
+            "end_port": 65535,
+            "start_port": 0
+          },
+          "protocol_id": 6
+        },
+        {
+          "protocol": "icmp",
+          "dst_ports": {
+            "end_port": 65535,
+            "start_port": 0
+          },
+          "src_ports": {
+            "end_port": 65535,
+            "start_port": 0
+          },
+          "protocol_id": 1
+        },
+        {
+          "protocol": "udp",
+          "dst_ports": {
+            "end_port": 65535,
+            "start_port": 0
+          },
+          "src_ports": {
+            "end_port": 65535,
+            "start_port": 0
+          },
+          "protocol_id": 17
+        }
+      ]
+    }
+  }
+}

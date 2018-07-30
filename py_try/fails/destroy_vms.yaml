@@ -1,0 +1,37 @@
+- name: Execute tasks
+  hosts: localhost
+  tasks:
+  - name: Delete server instances
+    shell: "source /etc/kolla/kolla-toolbox/admin-openrc.sh"
+    os_server:
+      state: absent
+      auth:
+          project_name: "{{ item.project_name }}"
+      name: "{{ item.name }}"
+      image: cirros
+      flavor: m1.tiny
+      key_name: ansible_key
+      nics:
+        - net-name: "{{ item.net_name }}"
+        - project-name: "{{ item.project_name }}"
+    register: "{{ item.name }}"
+    with_items:
+      - { project_name: 'HR-DEV', name: 'web-dev', net_name: 'webvndev'}
+      - { project_name: 'HR-DEV', name: 'app-dev', net_name: 'appvndev'}
+      - { project_name: 'HR-DEV', name: 'db-dev', net_name: 'dbvndev'}
+      - { project_name: 'HR-PROD', name: 'web-prod', net_name: 'webvndev'}
+      - { project_name: 'HR-PROD', name: 'app-prod', net_name: 'appvndev'}
+      - { project_name: 'HR-PROD', name: 'db-prod', net_name: 'dbvndev'}
+    tags:
+      - deletevms
+
+  - name: Delete Projects
+    os_project:
+      state: absent
+      name: "{{ item }}"
+      domain_id: default
+    with_items:
+      - HR-DEV
+      - HR-PROD
+    tags:
+      - deleteproj

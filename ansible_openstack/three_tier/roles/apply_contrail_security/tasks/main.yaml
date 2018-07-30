@@ -1,0 +1,142 @@
+# @Author: Arohi Gupta <agupta>
+# @Date:   2018-07-05T16:30:49-07:00
+# @Email:  agupta@juniper.net
+# @Filename: main.yaml
+# @Last modified by:   agupta
+# @Last modified time: 2018-07-25T13:31:51-07:00
+
+---
+- name: Generate Token
+  shell: "openstack token issue -c id -f value"
+  register: token
+  tags: vm_int
+- name: Check if reachable
+  uri:
+    url: http://{{controlserver}}:{{httpd_port}}/projects
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+
+
+- name: "Disable Snat on Virtual Network"
+  ignore_errors: yes
+  modifyvn:
+    X_Auth_Token: '{{ token.stdout }}'
+    Content_Type : 'application/json'
+    vn_name: "{{item.vn_name}}"
+    URL: http://{{controlserver}}:{{httpd_port}}/
+  with_items: "{{ VNs }}"
+
+- name: Ensures {{ role_path }}/templates/sg dir exists
+  file: path={{ role_path }}/templates/sg state=directory
+
+
+- name: "Generate Template to create Service Groups"
+  template: src=createsg.html dest=/{{ role_path }}/templates/sg/{{item.name}}.html
+  with_items: "{{ ServiceGroups }}"
+
+- name: "POST templates to create Service Groups"
+  ignore_errors: yes
+  uri:
+    url: http://{{controlserver}}:{{httpd_port}}/service-groups
+    method: POST
+    body: "{{ lookup('file','../templates/sg/{{item.name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ ServiceGroups }}"
+
+- name: Ensures {{ role_path }}/templates/fwr dir exists
+  file: path={{ role_path }}/templates/fwr state=directory
+
+
+- name: "Generate Template to create Firewall_Rules"
+  template: src=fw_rules.html dest=/{{ role_path }}/templates/fwr/{{item.name}}.html
+  with_items: "{{ Firewall_Rules }}"
+
+- name: "POST templates to create Firewall Rules"
+  ignore_errors: yes
+  uri:
+    url: http://{{controlserver}}:{{httpd_port}}/firewall-rules
+    method: POST
+    body: "{{ lookup('file','../templates/fwr/{{item.name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ Firewall_Rules }}"
+
+- name: Ensures {{ role_path }}/templates/fp dir exists
+  file: path={{ role_path }}/templates/fp state=directory
+
+
+- name: "Generate Template to create Firewall_Policy"
+  template: src=fw_policy.html dest=/{{ role_path }}/templates/fp/{{item.display_name}}.html
+  with_items: "{{ Firewall_Policy }}"
+
+
+- name: "POST templates to create Firewall_Policy"
+  ignore_errors: yes
+  uri:
+    url: http://{{controlserver}}:{{httpd_port}}/firewall-policys
+    method: POST
+    body: "{{ lookup('file','../templates/fp/{{item.display_name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ Firewall_Policy }}"
+
+- name: Ensures {{ role_path }}/templates/aps dir exists
+  file: path={{ role_path }}/templates/aps state=directory
+
+- name: "Generate Template to create application_policy_set"
+  template: src=policy_set.html dest=/{{ role_path }}/templates/aps/{{item.name}}.html
+  with_items: "{{ application_policy_set }}"
+
+- name: "POST templates to create application_policy_set"
+  ignore_errors: yes
+  uri:
+    url: http://{{controlserver}}:{{httpd_port}}/application-policy-sets
+    method: POST
+    body: "{{ lookup('file','../templates/aps/{{item.name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ application_policy_set }}"
+
+
+- name: "Attach VM interface"
+  ignore_errors: yes
+  attach_vm_int:
+    X_Auth_Token: '{{ token.stdout }}'
+    Content_Type : 'application/json'
+    URL: http://{{controlserver}}:{{httpd_port}}/
+    name: "{{item.name}}"
+    tags: "{{item.tags}}"
+    label: "{{item.label}}"
+  with_items: "{{ VM_INT }}"
+  tags: vm_int
+
+
+- name: "Attach tags to projects"
+  ignore_errors: yes
+  attach_project:
+    X_Auth_Token: '{{ token.stdout }}'
+    Content_Type : 'application/json'
+    URL: http://{{controlserver}}:{{httpd_port}}/
+    proj_name: "{{item.proj_name}}"
+    tag_name1: "{{item.tag_name1}}"
+    tag_name2: "{{item.tag_name2}}"
+    tag_name3: "{{item.tag_name3}}"
+  with_items: "{{ Projects }}"

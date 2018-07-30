@@ -1,0 +1,135 @@
+Region:
+  - name: Prod
+    availability_zone: France
+    hosts: contrail-node2.contrail-node
+  - name: Dev
+    availability_zone: USA
+    hosts:  contrail-node3
+Network_Data:
+  - name: web_dev
+    project_name: HR-dev
+    net_name: webvndev
+    group: web
+    a_zone: USA
+  - name: app_dev
+    project_name: HR-dev
+    net_name: appvndev
+    group: app
+    a_zone: USA
+  - name: db_dev
+    project_name: HR-dev
+    net_name: dbvndev
+    group: db
+    a_zone: USA
+  - name: web_prod
+    project_name: HR-prod
+    net_name: webvnprod
+    group: web
+    a_zone: France
+
+  - name: app_prod
+    project_name: HR-prod
+    net_name: appvnprod
+    group: app
+    a_zone: France
+
+  - name: db_prod
+    project_name: HR-prod
+    net_name: dbvnprod
+    group: db
+    a_zone: France
+
+
+Tags:
+  - name: HR-HCM
+    label: application
+  - name: Development
+    label: deployment
+  - name: Production
+    label: deployment
+  - name: USA
+    label: site
+  - name: France
+    label: site
+  - name: Web
+    label: tier
+  - name: App
+    label: tier
+  - name: db
+    label: tier
+  - name: AdminAccess
+    label: tier
+
+IPAMS:
+  - ipam_name: ipam-Prod
+    project: HR-prod
+  - ipam_name: ipam-Dev
+    project: HR-dev
+
+VNs:
+  - vn_name: webvnprod
+    project: HR-prod
+    default_gateway: 5.5.5.1
+    dns_server_address: 5.5.5.2
+    ip_prefix: 5.5.5.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Prod
+    route_target: 6300:123
+    tier: Web
+    docker: docker run -itd --name web --net=host -e REDMINE_SVC=6.6.6.3 -e REDMINE_SVC_PORT=3000 savvythru/three-tier-proxy
+
+  - vn_name: webvndev
+    project: HR-dev
+    default_gateway: 2.2.2.1
+    dns_server_address: 2.2.2.2
+    ip_prefix: 2.2.2.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Dev
+    route_target: 6300:123
+    tier: Web
+    docker: docker run -itd --name web --net=host -e REDMINE_SVC=3.3.3.3 -e REDMINE_SVC_PORT=3000 savvythru/three-tier-proxy
+
+  - vn_name: dbvnprod
+    project: HR-prod
+    default_gateway: 7.7.7.1
+    dns_server_address: 7.7.7.2
+    ip_prefix: 7.7.7.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Prod
+    route_target: 6300:123
+    tier: db
+    docker: docker run -itd --name database --net=host -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=redmine savvythru/three-tier-database
+
+
+  - vn_name: dbvndev
+    project: HR-dev
+    default_gateway: 4.4.4.1
+    dns_server_address: 4.4.4.2
+    ip_prefix: 4.4.4.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Dev
+    route_target: 6300:123
+    tier: db
+    docker: docker run -itd --name database --net=host -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=redmine savvythru/three-tier-database
+
+  - vn_name: appvnprod
+    project: HR-prod
+    default_gateway: 6.6.6.1
+    dns_server_address: 6.6.6.2
+    ip_prefix: 6.6.6.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Prod
+    route_target: 6300:123
+    tier: App
+    docker: docker run -itd --name app --net=host -e REDMINE_DB_MYSQL=7.7.7.3 -e REDMINE_DB_PASSWORD=secret savvythru/three-tier-frontend
+
+  - vn_name: appvndev
+    project: HR-dev
+    default_gateway: 3.3.3.1
+    dns_server_address: 3.3.3.2
+    ip_prefix: 3.3.3.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Dev
+    route_target: 6300:123
+    tier: App
+    docker: docker run -itd --name app --net=host -e REDMINE_DB_MYSQL=4.4.4.3 -e REDMINE_DB_PASSWORD=secret savvythru/three-tier-frontend

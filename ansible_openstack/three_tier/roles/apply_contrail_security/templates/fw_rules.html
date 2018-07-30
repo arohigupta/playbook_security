@@ -1,0 +1,51 @@
+{
+  "firewall-rule": {
+    "endpoint_1": {
+      "tags": [
+        "{{item.tag1}}"
+      ]
+    },
+    "endpoint_2": {
+      "tags": [
+        "{{item.tag2}}"
+      ]
+    },
+    "display_name": "{{item.name}}",
+    "action_list": {
+      "simple_action": "{{item.simple_action}}"
+    },
+    "parent_type": "policy-management",
+    "direction": "{{item.direction}}",
+    "name": "{{item.name}}",
+    "tag_refs": [
+      {
+        "to": [
+          "{{item.tag_refs1}}"
+        ],
+        "attr": "null"
+      },
+      {
+        "to": [
+          "{{item.tag_refs2}}"
+        ],
+        "attr": "null"
+      }
+    ],
+    "match_tag_types": {
+      "tag_type": []
+    },
+    "service_group_refs": [
+      {
+        "to": [
+          "default-policy-management",
+          "{{item.ServiceGroup}}"
+        ],
+        "attr": "null"
+      }
+    ],
+    "fq_name": [
+      "default-policy-management",
+      "{{item.name}}"
+    ]
+  }
+}

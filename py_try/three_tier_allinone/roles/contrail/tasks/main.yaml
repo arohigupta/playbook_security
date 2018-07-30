@@ -1,0 +1,158 @@
+---
+- name: Generate Token
+  shell: "openstack token issue -c id -f value"
+  register: token
+  tags:
+    - current
+- name: Check if reachable
+  uri:
+    url: http://10.87.5.8:8082/projects
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+- name: "Generate templates to post tags"
+  template: src=posttags.html dest=./{{item.name}}.html
+  with_items: "{{ Tags }}"
+- name: "POST templates to post tags"
+  ignore_errors: yes
+  uri:
+    url: http://10.87.5.8:8082/tags
+    method: POST
+    body: "{{ lookup('file','/root/ansible_openstack/three_tier/{{item.name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ Tags }}"
+
+- name: "Generate Template to create IPAMs"
+  template: src=ipams.html dest=./{{item.ipam_name}}.html
+  with_items: "{{ IPAMS }}"
+
+- name: "Sleep to sync projects"
+# Pause for 5 minutes to build app cache.
+  pause:
+    minutes: 1
+- name: "POST templates to create IPAMs"
+  ignore_errors: yes
+  uri:
+    url: http://10.87.5.8:8082/network-ipams
+    method: POST
+    body: "{{ lookup('file','/root/ansible_openstack/three_tier/{{item.ipam_name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ IPAMS }}"
+
+
+- name: "Disable Snat on Virtual Network"
+  ignore_errors: yes
+  modifyvn:
+    X_Auth_Token: '{{ token.stdout }}'
+    Content_Type : 'application/json'
+    vn_name: "{{item.vn_name}}"
+  with_items: "{{ VNs }}"
+
+- name: "Generate Template to create Service Groups"
+  template: src=createsg.html dest=./{{item.name}}.html
+  with_items: "{{ ServiceGroups }}"
+
+- name: "POST templates to create Service Groups"
+  ignore_errors: yes
+  uri:
+    url: http://10.87.5.8:8082/service-groups
+    method: POST
+    body: "{{ lookup('file','/root/ansible_openstack/three_tier/{{item.name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ ServiceGroups }}"
+
+- name: "Generate Template to create Firewall_Rules"
+  template: src=fw_rules.html dest=./{{item.name}}.html
+  with_items: "{{ Firewall_Rules }}"
+
+- name: "POST templates to create Firewall Rules"
+  ignore_errors: yes
+  uri:
+    url: http://10.87.5.8:8082/firewall-rules
+    method: POST
+    body: "{{ lookup('file','/root/ansible_openstack/three_tier/{{item.name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ Firewall_Rules }}"
+
+- name: "Generate Template to create Firewall_Policy"
+  template: src=fw_policy.html dest=./{{item.display_name}}.html
+  with_items: "{{ Firewall_Policy }}"
+
+
+- name: "POST templates to create Firewall_Policy"
+  ignore_errors: yes
+  uri:
+    url: http://10.87.5.8:8082/firewall-policys
+    method: POST
+    body: "{{ lookup('file','/root/ansible_openstack/three_tier/{{item.display_name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ Firewall_Policy }}"
+
+
+- name: "Generate Template to create application_policy_set"
+  template: src=policy_set.html dest=./{{item.name}}.html
+  with_items: "{{ application_policy_set }}"
+
+- name: "POST templates to create application_policy_set"
+  ignore_errors: yes
+  uri:
+    url: http://10.87.5.8:8082/application-policy-sets
+    method: POST
+    body: "{{ lookup('file','/root/ansible_openstack/three_tier/{{item.name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ application_policy_set }}"
+
+
+- name: "Attach VM interface"
+  ignore_errors: yes
+  attach_vm_int:
+    X_Auth_Token: '{{ token.stdout }}'
+    Content_Type : 'application/json'
+    URL: http://10.87.5.8:8082/
+    name: "{{item.name}}"
+    tags: "{{item.tags}}"
+    label: "{{item.label}}"
+  with_items: "{{ VM_INT }}"
+
+
+- name: "Attach tags to projects"
+  ignore_errors: yes
+  attach_project:
+    X_Auth_Token: '{{ token.stdout }}'
+    Content_Type : 'application/json'
+    URL: http://10.87.5.8:8082/
+    proj_name: "{{item.proj_name}}"
+    tag_name1: "{{item.tag_name1}}"
+    tag_name2: "{{item.tag_name2}}"
+    tag_name3: "{{item.tag_name3}}"
+  with_items: "{{ Projects }}"

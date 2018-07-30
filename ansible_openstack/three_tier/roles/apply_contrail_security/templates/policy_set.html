@@ -1,0 +1,29 @@
+{
+  "application-policy-set": {
+    "fq_name": [
+      "default-policy-management",
+      "{{item.name}}"
+    ],
+    "parent_type": "policy-management",
+    "name": "{{item.name}}",
+    "tag_refs": [
+      {
+        "to": [
+          "application={{item.application}}"
+        ],
+        "attr": "null"
+      }
+    ],
+    "firewall_policy_refs": [
+      {
+        "to": [
+          "default-policy-management",
+          "{{item.firewall_policy}}"
+        ],
+        "attr": {
+          "sequence": "0"
+        }
+      }
+    ]
+  }
+}

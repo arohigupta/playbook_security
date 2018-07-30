@@ -1,0 +1,113 @@
+# @Author: Arohi Gupta <agupta>
+# @Date:   2018-07-24T15:27:17-07:00
+# @Email:  agupta@juniper.net
+# @Filename: main.yaml
+# @Last modified by:   agupta
+# @Last modified time: 2018-07-25T11:28:13-07:00
+
+
+# Tags: This represents the tags to be created.
+#   - name: HR-HCM #this is the tag value.
+#     label: application # this is the tag type
+
+Tags:
+  - name: HR-HCM
+    label: application
+  - name: Development
+    label: deployment
+  - name: Production
+    label: deployment
+  - name: USA
+    label: site
+  - name: France
+    label: site
+  - name: Web
+    label: tier
+  - name: App
+    label: tier
+  - name: db
+    label: tier
+  - name: AdminAccess
+    label: tier
+
+# IPAMS: This represents the ipams to be created.
+#   - ipam_name: ipam-Prod
+#     project: HR-prod
+IPAMS:
+  - ipam_name: ipam-Prod
+    project: HR-prod
+  - ipam_name: ipam-Dev
+    project: HR-dev
+
+# VNs: This is used to create virtual networks.
+#   - vn_name: webvnprod #name of the virtual network.
+#     project: HR-prod #project this virtual network is associated with.
+#     default_gateway: 5.5.5.1
+#     dns_server_address: 5.5.5.2
+#     ip_prefix: 5.5.5.0
+#     ip_prefix_len: 24
+#     ipam_name: ipam-Prod
+#     route_target: 6300:123
+#     tier: Web
+# This assumes that snat & DHCP is Enabled. For more info..check under templates/vns.html
+VNs:
+  - vn_name: webvnprod
+    project: HR-prod
+    default_gateway: 5.5.5.1
+    dns_server_address: 5.5.5.2
+    ip_prefix: 5.5.5.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Prod
+    route_target: 6300:123
+    tier: Web
+
+  - vn_name: webvndev
+    project: HR-dev
+    default_gateway: 2.2.2.1
+    dns_server_address: 2.2.2.2
+    ip_prefix: 2.2.2.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Dev
+    route_target: 6300:123
+    tier: Web
+
+  - vn_name: dbvnprod
+    project: HR-prod
+    default_gateway: 7.7.7.1
+    dns_server_address: 7.7.7.2
+    ip_prefix: 7.7.7.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Prod
+    route_target: 6300:123
+    tier: db
+
+
+  - vn_name: dbvndev
+    project: HR-dev
+    default_gateway: 4.4.4.1
+    dns_server_address: 4.4.4.2
+    ip_prefix: 4.4.4.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Dev
+    route_target: 6300:123
+    tier: db
+
+  - vn_name: appvnprod
+    project: HR-prod
+    default_gateway: 6.6.6.1
+    dns_server_address: 6.6.6.2
+    ip_prefix: 6.6.6.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Prod
+    route_target: 6300:123
+    tier: App
+
+  - vn_name: appvndev
+    project: HR-dev
+    default_gateway: 3.3.3.1
+    dns_server_address: 3.3.3.2
+    ip_prefix: 3.3.3.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Dev
+    route_target: 6300:123
+    tier: App

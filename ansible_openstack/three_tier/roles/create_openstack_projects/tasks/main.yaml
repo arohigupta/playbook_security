@@ -1,0 +1,66 @@
+# @Author: Arohi Gupta <agupta>
+# @Date:   2018-07-06T15:38:49-07:00
+# @Email:  agupta@juniper.net
+# @Filename: main.yaml
+# @Last modified by:   agupta
+# @Last modified time: 2018-07-24T16:55:06-07:00
+
+---
+- name: Create a new Projects
+  ignore_errors: no
+  os_project:
+    state: present
+    name: "{{ item.name }}"
+    domain_id: default
+    enabled: True
+  with_items: "{{ Projects }}"
+
+- name: Add Roles to the new project
+  os_user_role:
+    user: admin
+    role: "{{ item }}"
+    project: HR-dev
+  with_items:
+    - admin
+    - _member_
+
+- name: Add Roles to the new project
+  os_user_role:
+    user: admin
+    role: "{{ item }}"
+    project: HR-prod
+  with_items:
+    - admin
+    - _member_
+
+- name: Add Users to the new project HR-dev
+  os_user_role:
+    user: "{{ item }}"
+    role: _member_
+    project: HR-dev
+  with_items:
+    - heat
+    - neutron
+    - placement
+    - ironic
+    - swift
+    - barbican
+    - glance
+    - ironic-inspector
+    - nova
+
+- name: Add Users to the new project HR-prod
+  os_user_role:
+    user: "{{ item }}"
+    role: _member_
+    project: HR-prod
+  with_items:
+    - heat
+    - neutron
+    - placement
+    - ironic
+    - swift
+    - barbican
+    - glance
+    - ironic-inspector
+    - nova

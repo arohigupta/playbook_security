@@ -1,0 +1,14 @@
+Projects:
+  - name: HR-dev
+  - name: HR-prod
+
+Users:
+  - name: heat
+  - name: neutron
+  - name: placement
+  - name: ironic
+  - name: swift
+  - name: barbican
+  - name: glance
+  - name: ironic-inspector
+  - name: nova

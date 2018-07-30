@@ -1,0 +1,7 @@
+---
+- name: install pip
+  package: name=python-pip state=installed
+
+- name: Installing python libraries using requirements file roles/base/files..
+  pip:
+    requirements: /"{{ role_path }}"/files/requirements.txt

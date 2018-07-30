@@ -1,0 +1,80 @@
+{
+  "global-vrouter-config": {
+    "flow_export_rate": -1,
+    "flow_aging_timeout_list": {
+      "flow_aging_timeout": [
+        {
+          "timeout_in_seconds": 2147483647,
+          "protocol": "tcp",
+          "port": 9161
+        },
+        {
+          "timeout_in_seconds": 2147483647,
+          "protocol": "tcp",
+          "port": 5673
+        },
+        {
+          "timeout_in_seconds": 2147483647,
+          "protocol": "tcp",
+          "port": 8082
+        }
+      ]
+    },
+    "encryption_mode": "none",
+    "ecmp_hashing_include_fields": {
+      "destination_ip": true,
+      "ip_protocol": true,
+      "source_ip": true,
+      "hashing_configured": true,
+      "source_port": true,
+      "destination_port": true
+    },
+    "vxlan_network_identifier_mode": "automatic",
+    "enable_security_logging": true,
+    "name": "default-global-vrouter-config",
+    "forwarding_mode": null,
+    "port_translation_pools": {
+      "port_translation_pool": [
+        {
+          "port_count": "1024",
+          "protocol": "tcp"
+        },
+        {
+          "port_count": "1024",
+          "protocol": "udp"
+        }
+      ]
+    },
+    "linklocal_services": {
+      "linklocal_service_entry": [
+        {
+          "linklocal_service_name": "LinkLocalVrouterAgent",
+          "ip_fabric_service_ip": [
+            "127.0.0.1"
+          ],
+          "linklocal_service_ip": "10.10.10.1",
+          "ip_fabric_service_port": 9091,
+          "ip_fabric_DNS_service_name": "",
+          "linklocal_service_port": 9091
+        },
+        {
+          "linklocal_service_name": "metadata",
+          "ip_fabric_service_ip": [
+            "{{IP}}"
+          ],
+          "linklocal_service_ip": "169.254.169.254",
+          "ip_fabric_service_port": 8775,
+          "ip_fabric_DNS_service_name": "",
+          "linklocal_service_port": 80
+        }
+      ]
+    },
+    "encapsulation_priorities": {
+      "encapsulation": [
+        "MPLSoUDP",
+        "MPLSoGRE",
+        "VXLAN"
+      ]
+    }
+  }
+}

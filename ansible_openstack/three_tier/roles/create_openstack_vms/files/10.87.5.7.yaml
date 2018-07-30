@@ -1,0 +1,20 @@
+---
+Details:
+- docker: docker run -itd --name web --net=host -e REDMINE_SVC=6.6.6.3 -e REDMINE_SVC_PORT=3000
+    savvythru/three-tier-proxy
+  ip_addr: 10.87.5.7
+  meta_ip: 169.254.0.3
+  tier: site=France
+  vm_name: web_prod
+- docker: docker run -itd --name app --net=host -e REDMINE_DB_MYSQL=7.7.7.3 -e REDMINE_DB_PASSWORD=secret
+    savvythru/three-tier-frontend
+  ip_addr: 10.87.5.7
+  meta_ip: 169.254.0.4
+  tier: site=France
+  vm_name: app_prod
+- docker: docker run -itd --name database --net=host -e MYSQL_ROOT_PASSWORD=secret
+    -e MYSQL_DATABASE=redmine savvythru/three-tier-database
+  ip_addr: 10.87.5.7
+  meta_ip: 169.254.0.5
+  tier: site=France
+  vm_name: db_prod

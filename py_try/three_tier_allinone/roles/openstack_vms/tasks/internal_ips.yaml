@@ -1,0 +1,10 @@
+---
+- name: Running script to collect ips
+  command: python /"{{ role_path }}"/files/matchinternal.py
+  delegate_to: 127.0.0.1
+  tags: new
+
+- name: Running script to install docker images on all vms ~ 5 mins..
+  command: python /"{{ role_path }}"/files/installdockerimages.py
+  delegate_to: 127.0.0.1
+  tags: new

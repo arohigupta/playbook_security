@@ -1,0 +1,47 @@
+# # @Author: Arohi Gupta <agupta>
+# # @Date:   2018-07-05T16:30:49-07:00
+# # @Email:  agupta@juniper.net
+# @Last modified by:   agupta
+# @Last modified time: 2018-07-30T11:03:05-07:00
+# # Test without the localhost TODO
+---
+# - name: add container to inventory
+#   add_host:
+#     name: [container-name]
+#     ansible_connection: docker
+#   changed_when: false
+
+- hosts: localhost
+  become: true
+  gather_facts: no
+  roles:
+    - create_openstack_projects
+    - allow_internet_access
+    - create_openstack_vms
+
+- hosts: nodes
+  become: true
+  gather_facts: no
+  remote_user: root
+  roles:
+    - install_base_packages
+
+- hosts: nodes
+  gather_facts: no
+  remote_user: root
+  tasks:
+  - name: Copy Script
+    copy: src=./roles/create_openstack_vms/files/installdockerimages.py dest=/root/installdockerimages.py owner=root group=root mode=755
+
+  - name: Copy files.
+    copy: src=./roles/create_openstack_vms/files/{{inventory_hostname}}.yaml dest=/root/data.yaml owner=root group=root mode=755
+
+  - name: Execute script
+    command: python /root/installdockerimages.py
+
+- hosts: localhost
+  become: true
+  gather_facts: no
+  roles:
+    - apply_contrail_security
+  tags: internet

@@ -1,0 +1,63 @@
+provider_config:
+  bms:
+    ssh_pwd: c0ntrail123
+    ssh_user: root
+    ntpserver: 66.129.255.62
+    domainsuffix: contrail-node
+instances:
+  contrail-node1:
+    provider: bms
+    ip: 10.87.5.8
+    roles:
+      config_database:
+      config:
+      control:
+      analytics_database:
+      analytics:
+      webui:
+      openstack_control:
+      openstack_network:
+      openstack_storage:
+      openstack_monitoring:
+
+  contrail-node2:
+    provider: bms
+    ip: 10.87.5.7
+    roles:
+      openstack_compute:
+      vrouter:
+        VROUTER_GATEWAY: 10.87.5.126
+  contrail-node3:
+    provider: bms
+    ip: 10.87.5.6
+    roles:
+      openstack_compute:
+      vrouter:
+        VROUTER_GATEWAY: 10.87.5.126
+global_configuration:
+  CONTAINER_REGISTRY: ci-repo.englab.juniper.net:5000
+  REGISTRY_PRIVATE_INSECURE: TRUE
+contrail_configuration:
+  AAA_MODE: cloud-admin
+  CONTRAIL_VERSION: latest
+  #CONTRAIL_VERSION: latest
+  #CONTAINER_REGISTRY: opencontrailnightly
+  #CONTROLLER_NODES: 10.102.44.52
+  CLOUD_ORCHESTRATOR: openstack
+  RABBITMQ_NODE_PORT: 5673
+  PHYSICAL_INTERFACE: eno2
+  KEYSTONE_AUTH_HOST: 10.87.5.8
+  KEYSTONE_AUTH_URL_VERSION: /v3
+  IPFABRIC_SERVICE_IP: 10.87.5.8
+  RABBITMQ_NODE_PORT: 5673
+  AUTH_MODE: keystone
+  #JVM_EXTRA_OPTS: "-Xms1g -Xmx2g"
+kolla_config:
+  kolla_globals:
+    kolla_internal_vip_address: 10.87.5.8
+    contrail_api_interface_address: 10.87.5.8
+    network_interface: "eno2"
+    enable_haproxy: "no"
+    metadata_secret: contrail
+    kolla_passwords:
+      keystone_admin_password: c0ntrail123

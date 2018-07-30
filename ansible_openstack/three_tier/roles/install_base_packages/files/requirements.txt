@@ -1,0 +1,4 @@
+Jinja2==2.10
+requests==2.18.4
+paramiko==2.1.1
+PyYAML==3.12

@@ -1,0 +1,46 @@
+{
+  "virtual-network": {
+    "parent_type": "project",
+    "fq_name": [
+      "default-domain",
+      "HR-prod",
+      "appvnprod"
+    ],
+    "fabric_snat": true,
+    "tag_refs": [
+      {
+        "attr": "None",
+        "to": [
+          "tier=App"
+        ]
+      }
+    ],
+    "route_target_list": {
+      "route_target": [
+        "target:6300:123"
+      ]
+    },
+    "network_ipam_refs": [
+      {
+        "to": [
+          "default-domain",
+          "HR-prod",
+          "ipam-Prod"
+        ],
+        "attr": {
+          "ipam_subnets": [
+            {
+              "subnet": {
+                "ip_prefix": "6.6.6.0",
+                "ip_prefix_len": 24
+              },
+              "addr_from_start": true,
+              "enable_dhcp": true,
+              "default_gateway": "6.6.6.1"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

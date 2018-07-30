@@ -1,0 +1,81 @@
+---
+- name: Generate Token
+  shell: "openstack token issue -c id -f value"
+  register: token
+  tags:
+    - current
+- name: Check if reachable
+  uri:
+    url: http://10.87.5.8:8082/projects
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+- name: "Generate templates to post tags"
+  template: src=posttags.html dest=./{{item.name}}.html
+  with_items: "{{ Tags }}"
+- name: "POST templates to post tags"
+  ignore_errors: yes
+  uri:
+    url: http://10.87.5.8:8082/tags
+    method: POST
+    body: "{{ lookup('file','/root/ansible_openstack/three_tier/{{item.name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ Tags }}"
+
+- name: "Generate Template to create IPAMs"
+  template: src=ipams.html dest=./{{item.ipam_name}}.html
+  with_items: "{{ IPAMS }}"
+
+- name: "Sleep to sync projects"
+# Pause for 5 minutes to build app cache.
+  pause:
+    minutes: 1
+
+- name: Generating new Token
+  shell: "openstack token issue -c id -f value"
+  register: token
+  tags:
+    - current
+- name: "POST templates to create IPAMs"
+  ignore_errors: yes
+  uri:
+    url: http://10.87.5.8:8082/network-ipams
+    method: POST
+    body: "{{ lookup('file','/root/ansible_openstack/three_tier/{{item.ipam_name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ IPAMS }}"
+
+- name: "Generate Template to create VNs"
+  template: src=vns.html dest=./{{item.vn_name}}.html
+  with_items: "{{ VNs }}"
+
+- name: "POST templates to create VNs"
+  ignore_errors: yes
+  uri:
+    url: http://10.87.5.8:8082/virtual-networks
+    method: POST
+    body: "{{ lookup('file','/root/ansible_openstack/three_tier/{{item.vn_name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ VNs }}"
+
+- name: "Post required configuration to pull images."
+  ignore_errors: yes
+  linklocal:
+    X_Auth_Token: '{{ token.stdout }}'
+    Content_Type : 'application/json'
+    URL: 10.87.5.8

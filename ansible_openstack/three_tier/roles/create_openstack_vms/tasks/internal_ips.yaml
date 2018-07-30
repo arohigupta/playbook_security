@@ -1,0 +1,12 @@
+# @Author: Arohi Gupta <agupta>
+# @Date:   2018-07-12T15:09:34-07:00
+# @Email:  agupta@juniper.net
+# @Filename: internal_ips.yaml
+# @Last modified by:   agupta
+# @Last modified time: 2018-07-24T16:55:56-07:00
+
+---
+- name: Running script to collect ips
+  command: python /"{{ role_path }}"/files/match_internal.py
+  delegate_to: 127.0.0.1
+  tags: news
