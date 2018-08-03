@@ -2,7 +2,7 @@
 # @Date:   2018-07-06T16:08:38-07:00
 # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-07-24T16:35:12-07:00
+# @Last modified time: 2018-08-03T08:55:18-07:00
 
 # This playbook installs the base packages required for the working on nodes.
 ---
@@ -10,7 +10,7 @@
   package: name=python-pip state=installed
 
 - name: Copy files.
-  copy: src=/{{ role_path }}/files/requirements.txt dest=/root/requirements.txt owner=root group=root mode=755
+  copy: src=/{{ role_path }}/files/requirements dest=/root/requirements.txt owner=root group=root mode=755
 
 - name: Installing python libraries using requirements file roles/base/files..
   pip:
