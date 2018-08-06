@@ -1,0 +1,103 @@
+# @Author: Arohi Gupta <agupta>
+# @Date:   2018-07-24T15:17:10-07:00
+# @Email:  agupta@juniper.net
+# @Filename: main.yaml
+# @Last modified by:   agupta
+# @Last modified time: 2018-08-03T10:41:48-07:00
+
+---
+- name: Generate Token
+  shell: "openstack token issue -c id -f value"
+  register: token
+  tags:
+    - current
+- name: Check if reachable
+  uri:
+    url: http://{{controlserver}}:{{httpd_port}}/projects
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+
+- name: Ensures {{ role_path }}/templates/tags dir exists
+  file: path={{ role_path }}/templates/tags state=directory
+  tags: vns
+
+- name: "Generate templates to post tags"
+  template: src=posttags.html dest=/{{ role_path }}/templates/tags/{{item.name}}.html
+  with_items: "{{ Tags }}"
+- name: "POST templates to post tags"
+  ignore_errors: yes
+  uri:
+    url: http://{{controlserver}}:{{httpd_port}}/tags
+    method: POST
+    body: "{{ lookup('file','../templates/tags/{{item.name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ Tags }}"
+
+- name: Ensures {{ role_path }}/templates/ipams dir exists
+  file: path={{ role_path }}/templates/ipams state=directory
+  tags: vns
+
+- name: "Generate Template to create IPAMs"
+  template: src=ipams.html dest=/{{ role_path }}/templates/ipams/{{item.ipam_name}}.html
+  with_items: "{{ IPAMS }}"
+#
+# - name: "Sleep to sync projects"
+# # Pause for 5 minutes to build app cache.
+#   pause:
+#     minutes: 1
+#
+# - name: Generating new Token
+#   shell: "openstack token issue -c id -f value"
+#   register: token
+#   tags:
+#     - vns
+- name: "POST templates to create IPAMs"
+  ignore_errors: yes
+  uri:
+    url: http://{{controlserver}}:{{httpd_port}}/network-ipams
+    method: POST
+    body: "{{ lookup('file','../templates/ipams/{{item.ipam_name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ IPAMS }}"
+
+- name: Ensures {{ role_path }}/templates/vns dir exists
+  file: path={{ role_path }}/templates/vns state=directory
+  tags: vns
+
+- name: "Generate Template to create VNs"
+  template: src=vns.html dest=/{{ role_path }}/templates/vns/{{item.vn_name}}.html
+  with_items: "{{ VNs }}"
+  tags: vns
+
+- name: "POST templates to create VNs"
+  ignore_errors: yes
+  uri:
+    url: http://{{controlserver}}:{{httpd_port}}/virtual-networks
+    method: POST
+    body: "{{ lookup('file','../templates/vns/{{item.vn_name}}.html') }}"
+    body_format: json
+    return_content: yes
+    headers:
+      Content-Type: 'application/json'
+      X-Auth-Token: '{{ token.stdout }}'
+    register: Restdata
+  with_items: "{{ VNs }}"
+  tags: vns
+
+- name: "Post required configuration to pull images."
+  ignore_errors: yes
+  linklocal:
+    X_Auth_Token: '{{ token.stdout }}'
+    Content_Type : 'application/json'
+    URL: http://{{controlserver}}:{{httpd_port}}/

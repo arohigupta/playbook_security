@@ -1,0 +1,12 @@
+# @Author: Arohi Gupta <agupta>
+# @Date:   2018-08-03T08:58:15-07:00
+# @Email:  agupta@juniper.net
+# @Filename: all
+# @Last modified by:   agupta
+# @Last modified time: 2018-08-03T09:09:38-07:00
+
+---
+# Variables here are applicable to all host groups
+
+httpd_port: 8082
+controlserver: 10.10.16.135

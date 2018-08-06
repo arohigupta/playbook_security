@@ -1,0 +1,6 @@
+Jinja2==2.10
+requests==2.18.4
+paramiko==2.1.5
+PyYAML==3.12
+shade==1.29.0
+python-openstackclient==3.16.0

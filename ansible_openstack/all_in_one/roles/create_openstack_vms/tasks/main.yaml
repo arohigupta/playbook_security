@@ -1,0 +1,52 @@
+# @Author: Arohi Gupta <agupta>
+# @Date:   2018-07-06T15:57:19-07:00
+# @Email:  agupta@juniper.net
+# @Last modified by:   agupta
+# @Last modified time: 2018-08-05T20:43:09-07:00
+
+---
+#TODO: Uncomment after adding url
+# - name: Download image #
+#   get_url:
+#     url: "{{item.url}}"
+#     dest: "{{item.dest}}"
+#   with_items: "{{ Image }}"
+
+- name: Upload images to openstack
+  os_image:
+    name: ubuntu
+    container_format: bare
+    disk_format: qcow2
+    state: present
+    filename: /"{{ role_path }}"/files/ubuntu.qcow2
+
+- name: "Create 'Small' flavor with 8192MB of RAM, 4 virtual CPU, and 50GB of local disk"
+  os_nova_flavor:
+    state: present
+    name: m1.small
+    ram: 8192
+    vcpus: 4
+    disk: 50
+    ephemeral: 0
+
+- name: Create server instances
+  ignore_errors: no
+  os_server:
+    state: present
+    auth:
+        project_name: "{{ item.project_name }}"
+    name: "{{ item.name }}"
+    image: "{{item.image}}"
+    flavor: m1.small
+    nics:
+      - net-name: "{{ item.net_name }}"
+      - project-name: "{{ item.project_name }}"
+    wait: True
+  register: result_ips
+  with_items: "{{ VM_Data }}"
+  tags: new
+
+- name: "Wait.. to sync vms"
+  pause:
+    minutes: 5
+- import_tasks: internal_ips.yaml

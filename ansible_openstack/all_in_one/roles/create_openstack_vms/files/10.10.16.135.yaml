@@ -1,0 +1,48 @@
+# @Author: Arohi Gupta <agupta>
+# @Date:   2018-08-05T23:02:13-07:00
+# @Email:  agupta@juniper.net
+# @Filename: 10.10.16.135.yaml
+# @Last modified by:   agupta
+# @Last modified time: 2018-08-06T00:14:05-07:00
+
+---
+Details:
+- docker: docker run -itd --name web --net=host -e REDMINE_SVC=3.3.3.3 -e REDMINE_SVC_PORT=3000
+    savvythru/three-tier-proxy
+  ip_addr: 10.10.16.135
+  meta_ip: 169.254.0.3
+  order: 3
+  tier: tier=Web
+  vm_name: web_dev
+- docker: docker run -itd --name app --net=host -e REDMINE_DB_MYSQL=4.4.4.3 -e REDMINE_DB_PASSWORD=secret
+    savvythru/three-tier-frontend
+  ip_addr: 10.10.16.135
+  meta_ip: 169.254.0.4
+  order: 2
+  tier: tier=App
+  vm_name: app_dev
+- docker: docker run -itd --name database --net=host -e MYSQL_ROOT_PASSWORD=secret
+    -e MYSQL_DATABASE=redmine savvythru/three-tier-database
+  ip_addr: 10.10.16.135
+  meta_ip: 169.254.0.5
+  order: 1
+  tier: tier=db
+  vm_name: db_dev
+- docker: docker run -itd --name web --net=host -e REDMINE_SVC=6.6.6.3 -e REDMINE_SVC_PORT=3000 savvythru/three-tier-proxy
+  ip_addr: 10.10.16.135
+  meta_ip: 169.254.0.6
+  order: 3
+  tier: tier=Web
+  vm_name: web_prod
+- docker: docker run -itd --name app --net=host -e REDMINE_DB_MYSQL=7.7.7.3 -e REDMINE_DB_PASSWORD=secret savvythru/three-tier-frontend
+  ip_addr: 10.10.16.135
+  meta_ip: 169.254.0.7
+  order: 2
+  tier: tier=App
+  vm_name: app_prod
+- docker: docker run -itd --name database --net=host -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=redmine savvythru/three-tier-database
+  ip_addr: 10.10.16.135
+  meta_ip: 169.254.0.8
+  order: 1
+  tier: tier=db
+  vm_name: db_prod

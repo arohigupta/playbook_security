@@ -1,0 +1,174 @@
+# @Author: Arohi Gupta <agupta>
+# @Date:   2018-07-05T16:30:49-07:00
+# @Email:  agupta@juniper.net
+# @Filename: main.yaml
+# @Last modified by:   agupta
+# @Last modified time: 2018-07-24T16:54:33-07:00
+
+URL: http://10.87.5.8:8082
+Tags:
+  - name: HR-HCM
+    label: application
+  - name: Development
+    label: deployment
+  - name: Production
+    label: deployment
+  - name: USA
+    label: site
+  - name: France
+    label: site
+  - name: Web
+    label: tier
+  - name: App
+    label: tier
+  - name: db
+    label: tier
+  - name: AdminAccess
+    label: tier
+
+IPAMS:
+  - ipam_name: ipam-Prod
+    project: HR-prod
+  - ipam_name: ipam-Dev
+    project: HR-dev
+
+VNs:
+  - vn_name: webvnprod
+    project: HR-prod
+    default_gateway: 5.5.5.1
+    dns_server_address: 5.5.5.2
+    ip_prefix: 5.5.5.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Prod
+    route_target: 6300:123
+    tier: Web
+
+  - vn_name: webvndev
+    project: HR-dev
+    default_gateway: 2.2.2.1
+    dns_server_address: 2.2.2.2
+    ip_prefix: 2.2.2.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Dev
+    route_target: 6300:123
+    tier: Web
+
+  - vn_name: dbvnprod
+    project: HR-prod
+    default_gateway: 7.7.7.1
+    dns_server_address: 7.7.7.2
+    ip_prefix: 7.7.7.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Prod
+    route_target: 6300:123
+    tier: db
+
+  - vn_name: dbvndev
+    project: HR-dev
+    default_gateway: 4.4.4.1
+    dns_server_address: 4.4.4.2
+    ip_prefix: 4.4.4.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Dev
+    route_target: 6300:123
+    tier: db
+
+  - vn_name: appvnprod
+    project: HR-prod
+    default_gateway: 6.6.6.1
+    dns_server_address: 6.6.6.2
+    ip_prefix: 6.6.6.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Prod
+    route_target: 6300:123
+    tier: App
+
+  - vn_name: appvndev
+    project: HR-dev
+    default_gateway: 3.3.3.1
+    dns_server_address: 3.3.3.2
+    ip_prefix: 3.3.3.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Dev
+    route_target: 6300:123
+    tier: App
+
+ServiceGroups:
+  - name: AppService
+  - name: AdmintoAdminservices
+  - name: WebService
+
+#####################Create Firewall Rules########
+Firewall_Rules:
+  - name: webtoadmin
+    tag1: global:tier=Web
+    tag_refs1: tier=Web
+    tag2: global:tier=AdminAccess
+    tag_refs2: tier=AdminAccess
+    simple_action: pass
+    direction: <>
+    ServiceGroup: AdmintoAdminservices
+
+  - name: apptoadmin
+    tag1: global:tier=App
+    tag_refs1: tier=App
+    tag2: global:tier=AdminAccess
+    tag_refs2: tier=AdminAccess
+    simple_action: pass
+    direction: <>
+    ServiceGroup: AdmintoAdminservices
+
+  - name: apptodb
+    tag1: global:tier=App
+    tag_refs1: tier=App
+    tag2: global:tier=db
+    tag_refs2: tier=db
+    simple_action: pass
+    direction: '>'
+    ServiceGroup: AppService
+
+  - name: webtoapp
+    tag1: global:tier=Web
+    tag_refs1: tier=Web
+    tag2: global:tier=App
+    tag_refs2: tier=App
+    simple_action: pass
+    direction: '>'
+    ServiceGroup: WebService
+###################Creating Firewall policy###################
+###1) For more rules change the fw_rules.html file.########### d
+### Also add an extra rule here###############################
+##############################################################
+Firewall_Policy:
+  - display_name: OS Policy
+    policy_set: HRPolicySet
+    rule1: webtoadmin
+    rule2: apptoadmin
+    rule3: apptodb
+    rule4: webtoapp
+###################Creating application_policy_set###################
+application_policy_set:
+  - name: HRPolicySet
+    application: HR-HCM
+    firewall_policy: OS Policy
+
+##################Attach vhost0 to a tag###################
+VM_INT:
+  - name: vhost0
+    tags: AdminAccess
+    label: ip-fabric
+
+#########Attach tags to projects##############################
+###1) For more rules change the attachproj.html file.#########
+### Also add an extra rule here###############################
+##############################################################
+Projects:
+  - proj_name: HR-dev
+    tag_name1: site=USA
+    tag_name2: deployment=Development
+    tag_name3: application=HR-HCM
+
+  - proj_name: HR-prod
+    tag_name1: site=France
+    tag_name2: deployment=Production
+    tag_name3: application=HR-HCM
