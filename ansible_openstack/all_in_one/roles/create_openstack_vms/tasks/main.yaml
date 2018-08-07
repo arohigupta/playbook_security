@@ -2,7 +2,7 @@
 # @Date:   2018-07-06T15:57:19-07:00
 # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-05T20:43:09-07:00
+# @Last modified time: 2018-08-06T17:07:52-07:00
 
 ---
 #TODO: Uncomment after adding url
@@ -49,4 +49,5 @@
 - name: "Wait.. to sync vms"
   pause:
     minutes: 5
+
 - import_tasks: internal_ips.yaml

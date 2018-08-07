@@ -5,6 +5,7 @@ Details:
   ip_addr: 10.10.16.135
   meta_ip: 169.254.0.3
   order: 3
+  repo: savvythru/three-tier-proxy
   tier: tier=Web
   vm_name: web_dev
 - docker: docker run -itd --name app --net=host -e REDMINE_DB_MYSQL=4.4.4.3 -e REDMINE_DB_PASSWORD=secret
@@ -12,6 +13,7 @@ Details:
   ip_addr: 10.10.16.135
   meta_ip: 169.254.0.4
   order: 2
+  repo: savvythru/three-tier-proxy
   tier: tier=App
   vm_name: app_dev
 - docker: docker run -itd --name database --net=host -e MYSQL_ROOT_PASSWORD=secret
@@ -19,6 +21,7 @@ Details:
   ip_addr: 10.10.16.135
   meta_ip: 169.254.0.5
   order: 1
+  repo: savvythru/three-tier-proxy
   tier: tier=db
   vm_name: db_dev
 - docker: docker run -itd --name web --net=host -e REDMINE_SVC=6.6.6.3 -e REDMINE_SVC_PORT=3000
@@ -26,6 +29,7 @@ Details:
   ip_addr: 10.10.16.135
   meta_ip: 169.254.0.6
   order: 3
+  repo: savvythru/three-tier-proxy
   tier: tier=Web
   vm_name: web_prod
 - docker: docker run -itd --name app --net=host -e REDMINE_DB_MYSQL=7.7.7.3 -e REDMINE_DB_PASSWORD=secret
@@ -33,6 +37,7 @@ Details:
   ip_addr: 10.10.16.135
   meta_ip: 169.254.0.7
   order: 2
+  repo: savvythru/three-tier-proxy
   tier: tier=App
   vm_name: app_prod
 - docker: docker run -itd --name database --net=host -e MYSQL_ROOT_PASSWORD=secret
@@ -40,5 +45,6 @@ Details:
   ip_addr: 10.10.16.135
   meta_ip: 169.254.0.8
   order: 1
+  repo: savvythru/three-tier-proxy
   tier: tier=db
   vm_name: db_prod

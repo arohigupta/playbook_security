@@ -2,7 +2,7 @@
 # @Date:   2018-07-19T10:03:34-07:00
 # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-05T23:09:43-07:00
+# @Last modified time: 2018-08-06T11:55:56-07:00
 
 import xml.etree.ElementTree as ET
 import yaml
@@ -47,6 +47,7 @@ def main():
                 if values['vm_name']==ele['name']:
                     values['docker']=ele['docker']
                     values['order']=ele['order']
+                    values['repo']=ele['repo']
                     deets['Details'].append(values)
                 else:
                     continue

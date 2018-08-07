@@ -2,21 +2,16 @@
 # # @Date:   2018-07-05T16:30:49-07:00
 # # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-05T23:10:00-07:00
+# @Last modified time: 2018-08-07T11:39:15-07:00
 # # Test without the localhost TODO
 ---
-# - name: add container to inventory
-#   add_host:
-#     name: [container-name]
-#     ansible_connection: docker
-#   changed_when: false
 
 - hosts: localhost
   become: true
   gather_facts: no
   roles:
-    # - install_base_packages
-    # - create_openstack_projects
+    - install_base_packages
+    - create_openstack_projects
     - allow_internet_access
     - create_openstack_vms
 
@@ -32,10 +27,10 @@
 
   - name: Execute script
     command: python /root/installdockerimages.py
-#
-# - hosts: localhost
-#   become: true
-#   gather_facts: no
-#   roles:
-#     - apply_contrail_security
-#   tags: internet
+
+- hosts: localhost
+  become: true
+  gather_facts: no
+  roles:
+    - apply_contrail_security
+  tags: internet
