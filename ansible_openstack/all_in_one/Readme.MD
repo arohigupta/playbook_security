@@ -11,10 +11,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-It is assumed that an all in one setup is pre-installed.
-Refer the following page to install an all_in_one setup ->
-
-Here is an example of [instance.yaml](./allinone_instance.yaml)
+1)It is assumed that an all in one setup is pre-installed.
+Refer the following page to install an all_in_one setup -> [ansible_deployer](https://github.com/Juniper/contrail-ansible-deployer/wiki/Contrail-with-Kolla-Ocata)
+<br />
+2)Here is an example of [instance.yaml](./allinone_instance.yaml)<br />
 
 
 ### Installing
