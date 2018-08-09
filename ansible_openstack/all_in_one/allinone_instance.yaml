@@ -1,0 +1,41 @@
+# @Author: Arohi Gupta <agupta>
+# @Date:   2018-07-17T11:35:56-07:00
+# @Email:  agupta@juniper.net
+# @Filename: old_instantes.yaml
+# @Last modified by:   agupta
+# @Last modified time: 2018-08-02T20:08:27-07:00
+
+provider_config:
+  bms:
+    ssh_pwd: c0ntrail123
+    ssh_user: root
+    ntpserver: time1.google.com
+    domainsuffix: juniper.net
+instances:
+  bms1:
+    provider: bms
+    ip: 10.10.16.135
+    roles:
+      config_database:
+      config:
+      control:
+      analytics_database:
+      analytics:
+      webui:
+      vrouter:
+      openstack:
+      openstack_compute:
+contrail_configuration:
+  RABBITMQ_NODE_PORT: 5673
+  AUTH_MODE: keystone
+  KEYSTONE_AUTH_URL_VERSION: /v3
+  AAA_MODE: cloud-admin
+  CONTRAIL_VERSION: latest
+kolla_config:
+  kolla_globals:
+    enable_haproxy: no
+  kolla_passwords:
+    keystone_admin_password: c0ntrail123
+global_configuration:
+ CONTAINER_REGISTRY: opencontrailnightly
+ REGISTRY_PRIVATE_INSECURE: TRUE
