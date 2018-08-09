@@ -1,7 +1,7 @@
 # Contrail Security Example for all in one setup
 
 This script creates security policies for a demo topology. <br />
-Note: This procedure follows a specific demo topology and it's encouraged to use same or similar topology to effectively show case Contrail Security.
+Note: This procedure follows a specific demo topology and it's encouraged to use same or similar topology to effectively show case Contrail Security.[More info](https://github.com/fashaikh7/Contrail-Security/wiki/Contrail-Security-with-OpenStack-and-Bare-Metal-Server)
 
 ## Getting Started
 
@@ -12,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 1)It is assumed that an all in one setup is pre-installed.
-Refer the following page to install an all_in_one setup -> [ansible_deployer](https://github.com/Juniper/contrail-ansible-deployer/wiki/Contrail-with-Kolla-Ocata)
+Refer the following page to install an all_in_one setup [ansible_deployer](https://github.com/Juniper/contrail-ansible-deployer/wiki/Contrail-with-Kolla-Ocata)
 <br />
 2)Here is an example of [instance.yaml](./allinone_instance.yaml)<br />
 
@@ -59,15 +59,3 @@ Explain what these tests test and why
 ```
 Give an example
 ```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system

@@ -2,23 +2,24 @@
 # @Date:   2018-07-06T15:57:19-07:00
 # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-06T17:07:52-07:00
+# @Last modified time: 2018-08-09T15:55:38-07:00
 
 ---
 #TODO: Uncomment after adding url
-# - name: Download image #
-#   get_url:
-#     url: "{{item.url}}"
-#     dest: "{{item.dest}}"
-#   with_items: "{{ Image }}"
+- name: Download image #
+  get_url:
+    url: "{{item.url}}"
+    dest: "{{item.dest}}"
+  with_items: "{{ Image }}"
 
 - name: Upload images to openstack
   os_image:
-    name: ubuntu
+    name: "{{item.name}}"
     container_format: bare
-    disk_format: qcow2
+    disk_format: "{{item.disk_format}}"
     state: present
-    filename: /"{{ role_path }}"/files/ubuntu.qcow2
+    filename: "{{item.dest}}"
+  with_items: "{{ Image }}"
 
 - name: "Create 'Small' flavor with 8192MB of RAM, 4 virtual CPU, and 50GB of local disk"
   os_nova_flavor:
