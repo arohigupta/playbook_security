@@ -52,7 +52,8 @@ hosts:
 To run the playbook run the following command. Ensure you are in the `all_in_one` directory
 
 ```
-ansible_playbook playbook.yaml
+source /etc/kolla/kolla-toolbox/admin-openrc.sh
+ansible-playbook playbook.yaml
 ```
 
 
