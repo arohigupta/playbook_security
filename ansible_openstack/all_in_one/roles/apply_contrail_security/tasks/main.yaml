@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: main.yaml
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-10T00:50:38-07:00
+# @Last modified time: 2018-08-10T10:27:53-07:00
 
 ---
 - name: Generate Token
@@ -27,11 +27,7 @@
     URL: http://{{controlserver}}:{{httpd_port}}/
   with_items: "{{ VNs }}"
 
-- name: "Run Containers on vms!!"
-  ignore_errors: no
-  command: python ./roles/create_openstack_vms/files/run_containers.py
-  delegate_to: 127.0.0.1
-  tags: this
+
 - name: Ensures {{ role_path }}/templates/sg dir exists
   file: path={{ role_path }}/templates/sg state=directory
 
@@ -145,3 +141,9 @@
     tag_name2: "{{item.tag_name2}}"
     tag_name3: "{{item.tag_name3}}"
   with_items: "{{ Projects }}"
+
+- name: "Run Containers on vms!!"
+  ignore_errors: no
+  command: python ./roles/create_openstack_vms/files/run_containers.py
+  delegate_to: 127.0.0.1
+  tags: this
