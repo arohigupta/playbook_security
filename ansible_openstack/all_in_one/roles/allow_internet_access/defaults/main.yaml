@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: main.yaml
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-09T17:41:40-07:00
+# @Last modified time: 2018-08-10T00:35:10-07:00
 
 
 # Tags: This represents the tags to be created.
@@ -84,3 +84,9 @@ VNs:
     ipam_name: ipam-Prod
     route_target: 6300:123
     tier: App
+
+Projects:
+  - proj_name: HR-prod
+    tag_name1: site=France
+    tag_name2: deployment=Production
+    tag_name3: application=HR-HCM
