@@ -24,6 +24,9 @@ Clone the repo and edit these configuration files.
 ```
 
 yum -y install git ansible-2.4.2.0
+yum install -y gcc python-devel
+pip install python-openstackclient
+pip install python-ironicclient
 cd /root/
 git clone https://github.com/arohigupta/playbook_security.git
 cd playbook_security/ansible_openstack/all_in_one/
