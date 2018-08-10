@@ -2,7 +2,7 @@
 # @Date:   2018-07-06T15:57:19-07:00
 # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-09T15:55:38-07:00
+# @Last modified time: 2018-08-10T12:05:01-07:00
 
 ---
 #TODO: Uncomment after adding url
@@ -21,14 +21,15 @@
     filename: "{{item.dest}}"
   with_items: "{{ Image }}"
 
-- name: "Create 'Small' flavor with 8192MB of RAM, 4 virtual CPU, and 50GB of local disk"
+- name: "Create Flavors"
   os_nova_flavor:
     state: present
-    name: m1.small
-    ram: 8192
-    vcpus: 4
-    disk: 50
-    ephemeral: 0
+    name: "{{item.name}}"
+    ram: "{{item.ram}}"
+    vcpus: "{{item.vcpus}}"
+    disk: "{{item.disk}}"
+    ephemeral: "{{item.ephemeral}}"
+  with_items: "{{ Flavors }}"
 
 - name: Create server instances
   ignore_errors: no
@@ -38,7 +39,7 @@
         project_name: "{{ item.project_name }}"
     name: "{{ item.name }}"
     image: "{{item.image}}"
-    flavor: m1.small
+    flavor: "{{item.flavor}}"
     nics:
       - net-name: "{{ item.net_name }}"
       - project-name: "{{ item.project_name }}"

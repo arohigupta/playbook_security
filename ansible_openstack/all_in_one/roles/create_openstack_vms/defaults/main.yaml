@@ -2,7 +2,7 @@
 # @Date:   2018-07-06T16:12:54-07:00
 # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-10T11:23:42-07:00
+# @Last modified time: 2018-08-10T12:39:33-07:00
 
 hosts:
   - ip: 10.10.16.135
@@ -12,7 +12,17 @@ hosts:
 #     name: ubuntu #name of the image
 #     dest: /tmp/x-traffic1.qcow2 #directory to store on local machine
 #     disk_format: qcow2 #disk_format of the image
-
+Flavors:
+  - name: m1.small
+    ram: 8192
+    vcpus: 4
+    disk: 50
+    ephemeral: 0
+  - name: m1.tiny
+    ram: 1024
+    vcpus: 1
+    disk: 10
+    ephemeral: 0
 Image:
   - url: http://10.10.4.253/ubuntuimage.qcow2
     name: ubuntu
@@ -21,7 +31,7 @@ Image:
 
   - url: http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
     name: cirros
-    dest: /tmp/ubuntuimage.qcow2
+    dest: /tmp/cirros
     disk_format: qcow2
 
 # VM_Data: #This corresponds to the vm parameters
@@ -37,6 +47,7 @@ VM_Data:
     net_name: webvnprod
     group: web
     image: ubuntu
+    flavor: m1.small
     order: 3
     docker: docker run -itd --name web --net=host -e REDMINE_SVC=6.6.6.3 -e REDMINE_SVC_PORT=3000 savvythru/three-tier-proxy
     repo: savvythru/three-tier-proxy
@@ -44,6 +55,7 @@ VM_Data:
   - name: app_dev
     project_name: HR-dev
     net_name: appvndev
+    flavor: m1.tiny
     group: app
     image: cirros
 
@@ -52,6 +64,7 @@ VM_Data:
     net_name: appvnprod
     group: app
     image: ubuntu
+    flavor: m1.small
     order: 2
     docker: docker run -itd --name app --net=host -e REDMINE_DB_MYSQL=7.7.7.3 -e REDMINE_DB_PASSWORD=secret savvythru/three-tier-frontend
     repo: savvythru/three-tier-frontend
@@ -60,6 +73,7 @@ VM_Data:
     net_name: dbvnprod
     group: db
     image: ubuntu
+    flavor: m1.small
     order: 1
     docker: docker run -itd --name database --net=host -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=redmine savvythru/three-tier-database
     repo: savvythru/three-tier-database

@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: run_containers.py
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-10T10:54:17-07:00
+# @Last modified time: 2018-08-10T12:18:48-07:00
 import json
 import requests
 import subprocess
@@ -46,7 +46,7 @@ def send_command(command,ip):
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.connect(ip, port=port, username=username, password=password, timeout=3,)
     transport = client.get_transport()
-    pause = 1
+    pause = 70
     exit_status, stdout, stderr=issue_command(transport, pause, command)
     print (exit_status)
 
@@ -64,4 +64,4 @@ defaults=config_file()
 sorted_order=sorted(defaults, key=lambda k: k['order'])#this ensures db -> app -> web is installed in order.
 for ele in sorted_order:
     send_command(ele['docker'],ele['meta_ip'])
-    time.sleep(45)
+    time.sleep(10)
