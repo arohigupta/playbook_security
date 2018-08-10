@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: main.yaml
 # @Last modified by:   agupta
-# @Last modified time: 2018-07-24T16:55:06-07:00
+# @Last modified time: 2018-08-09T17:37:44-07:00
 
 ---
 - name: Create a new Projects
@@ -15,14 +15,6 @@
     enabled: True
   with_items: "{{ Projects }}"
 
-- name: Add Roles to the new project
-  os_user_role:
-    user: admin
-    role: "{{ item }}"
-    project: HR-dev
-  with_items:
-    - admin
-    - _member_
 
 - name: Add Roles to the new project
   os_user_role:
@@ -33,23 +25,10 @@
     - admin
     - _member_
 
-- name: Add Users to the new project HR-dev
-  os_user_role:
-    user: "{{ item }}"
-    role: _member_
-    project: HR-dev
-  with_items:
-    - heat
-    - neutron
-    - placement
-    - ironic
-    - swift
-    - barbican
-    - glance
-    - ironic-inspector
-    - nova
+
 
 - name: Add Users to the new project HR-prod
+  ignore_errors: yes
   os_user_role:
     user: "{{ item }}"
     role: _member_

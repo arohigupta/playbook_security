@@ -2,7 +2,7 @@
 # @Date:   2018-07-06T16:12:54-07:00
 # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-09T15:54:25-07:00
+# @Last modified time: 2018-08-09T17:42:22-07:00
 
 hosts:
   - ip: 10.10.16.135
@@ -26,30 +26,6 @@ Image:
 #     docker: docker run -itd --name web --net=host -e REDMINE_SVC=3.3.3.3 -e REDMINE_SVC_PORT=3000 savvythru/three-tier-proxy
 # the docker container it should come up with
 VM_Data:
-  - name: web_dev
-    project_name: HR-dev
-    net_name: webvndev
-    group: web
-    image: ubuntu
-    order: 3
-    docker: docker run -itd --name web --net=host -e REDMINE_SVC=3.3.3.3 -e REDMINE_SVC_PORT=3000 savvythru/three-tier-proxy
-    repo: savvythru/three-tier-proxy
-  - name: app_dev
-    project_name: HR-dev
-    net_name: appvndev
-    group: app
-    image: ubuntu
-    order: 2
-    docker: docker run -itd --name app --net=host -e REDMINE_DB_MYSQL=4.4.4.3 -e REDMINE_DB_PASSWORD=secret savvythru/three-tier-frontend
-    repo: savvythru/three-tier-frontend
-  - name: db_dev
-    project_name: HR-dev
-    net_name: dbvndev
-    group: db
-    image: ubuntu
-    order: 1
-    docker: docker run -itd --name database --net=host -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=redmine savvythru/three-tier-database
-    repo: savvythru/three-tier-database
   - name: web_prod
     project_name: HR-prod
     net_name: webvnprod

@@ -3,9 +3,8 @@
 # @Email:  agupta@juniper.net
 # @Filename: main.yaml
 # @Last modified by:   agupta
-# @Last modified time: 2018-07-24T16:54:33-07:00
+# @Last modified time: 2018-08-09T17:39:40-07:00
 
-URL: http://10.87.5.8:8082
 Tags:
   - name: HR-HCM
     label: application
@@ -29,8 +28,7 @@ Tags:
 IPAMS:
   - ipam_name: ipam-Prod
     project: HR-prod
-  - ipam_name: ipam-Dev
-    project: HR-dev
+
 
 VNs:
   - vn_name: webvnprod
@@ -43,15 +41,6 @@ VNs:
     route_target: 6300:123
     tier: Web
 
-  - vn_name: webvndev
-    project: HR-dev
-    default_gateway: 2.2.2.1
-    dns_server_address: 2.2.2.2
-    ip_prefix: 2.2.2.0
-    ip_prefix_len: 24
-    ipam_name: ipam-Dev
-    route_target: 6300:123
-    tier: Web
 
   - vn_name: dbvnprod
     project: HR-prod
@@ -63,15 +52,6 @@ VNs:
     route_target: 6300:123
     tier: db
 
-  - vn_name: dbvndev
-    project: HR-dev
-    default_gateway: 4.4.4.1
-    dns_server_address: 4.4.4.2
-    ip_prefix: 4.4.4.0
-    ip_prefix_len: 24
-    ipam_name: ipam-Dev
-    route_target: 6300:123
-    tier: db
 
   - vn_name: appvnprod
     project: HR-prod
@@ -83,15 +63,6 @@ VNs:
     route_target: 6300:123
     tier: App
 
-  - vn_name: appvndev
-    project: HR-dev
-    default_gateway: 3.3.3.1
-    dns_server_address: 3.3.3.2
-    ip_prefix: 3.3.3.0
-    ip_prefix_len: 24
-    ipam_name: ipam-Dev
-    route_target: 6300:123
-    tier: App
 
 ServiceGroups:
   - name: AppService
@@ -163,11 +134,6 @@ VM_INT:
 ### Also add an extra rule here###############################
 ##############################################################
 Projects:
-  - proj_name: HR-dev
-    tag_name1: site=USA
-    tag_name2: deployment=Development
-    tag_name3: application=HR-HCM
-
   - proj_name: HR-prod
     tag_name1: site=France
     tag_name2: deployment=Production
