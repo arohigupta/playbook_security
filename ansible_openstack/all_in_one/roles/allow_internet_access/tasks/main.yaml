@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: main.yaml
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-10T00:34:22-07:00
+# @Last modified time: 2018-08-10T00:51:24-07:00
 
 ---
 - name: Generate Token
@@ -46,18 +46,6 @@
 - name: "Generate Template to create IPAMs"
   template: src=ipams.html dest=/{{ role_path }}/templates/ipams/{{item.ipam_name}}.html
   with_items: "{{ IPAMS }}"
-
-- name: "Attach tags to projects"
-  ignore_errors: yes
-  attach_project:
-    X_Auth_Token: '{{ token.stdout }}'
-    Content_Type : 'application/json'
-    URL: http://{{controlserver}}:{{httpd_port}}/
-    proj_name: "{{item.proj_name}}"
-    tag_name1: "{{item.tag_name1}}"
-    tag_name2: "{{item.tag_name2}}"
-    tag_name3: "{{item.tag_name3}}"
-  with_items: "{{ Projects }}"
 
 - name: "POST templates to create IPAMs"
   ignore_errors: yes

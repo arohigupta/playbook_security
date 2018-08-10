@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: main.yaml
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-10T00:35:15-07:00
+# @Last modified time: 2018-08-10T00:50:38-07:00
 
 ---
 - name: Generate Token
@@ -134,14 +134,14 @@
   tags: vm_int
 
 
-# - name: "Attach tags to projects"
-#   ignore_errors: yes
-#   attach_project:
-#     X_Auth_Token: '{{ token.stdout }}'
-#     Content_Type : 'application/json'
-#     URL: http://{{controlserver}}:{{httpd_port}}/
-#     proj_name: "{{item.proj_name}}"
-#     tag_name1: "{{item.tag_name1}}"
-#     tag_name2: "{{item.tag_name2}}"
-#     tag_name3: "{{item.tag_name3}}"
-#   with_items: "{{ Projects }}"
+- name: "Attach tags to projects"
+  ignore_errors: yes
+  attach_project:
+    X_Auth_Token: '{{ token.stdout }}'
+    Content_Type : 'application/json'
+    URL: http://{{controlserver}}:{{httpd_port}}/
+    proj_name: "{{item.proj_name}}"
+    tag_name1: "{{item.tag_name1}}"
+    tag_name2: "{{item.tag_name2}}"
+    tag_name3: "{{item.tag_name3}}"
+  with_items: "{{ Projects }}"

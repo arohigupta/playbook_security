@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: main.yaml
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-09T17:37:44-07:00
+# @Last modified time: 2018-08-10T01:02:16-07:00
 
 ---
 - name: Create a new Projects
@@ -43,3 +43,11 @@
     - glance
     - ironic-inspector
     - nova
+
+- name: Create a test network.
+  os_network:
+    auth:
+        project_name: HR-prod
+    state: present
+    name: test
+    external: true
