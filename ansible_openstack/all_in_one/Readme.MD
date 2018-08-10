@@ -22,11 +22,11 @@ Refer the following page to install an all_in_one setup [ansible_deployer](https
 Clone the repo and edit these configuration files.
 
 ```
+
 yum -y install git ansible-2.4.2.0
 cd /root/
 git clone https://github.com/arohigupta/playbook_security.git
-cd ansible_openstack
-cd all_in_one
+cd playbook_security/ansible_openstack/all_in_one/
 vi group_vars/all
 ```
 
