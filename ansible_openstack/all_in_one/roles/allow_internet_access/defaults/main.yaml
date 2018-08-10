@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: main.yaml
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-10T00:35:10-07:00
+# @Last modified time: 2018-08-10T11:46:52-07:00
 
 
 # Tags: This represents the tags to be created.
@@ -36,8 +36,8 @@ Tags:
 IPAMS:
   - ipam_name: ipam-Prod
     project: HR-prod
-
-
+  - ipam_name: ipam-Dev
+    project: HR-dev
 # VNs: This is used to create virtual networks.
 #   - vn_name: webvnprod #name of the virtual network.
 #     project: HR-prod #project this virtual network is associated with.
@@ -60,7 +60,15 @@ VNs:
     route_target: 6300:123
     tier: Web
 
-
+  - vn_name: appvndev
+    project: HR-dev
+    default_gateway: 3.3.3.1
+    dns_server_address: 3.3.3.2
+    ip_prefix: 3.3.3.0
+    ip_prefix_len: 24
+    ipam_name: ipam-Dev
+    route_target: 6300:123
+    tier: App
 
   - vn_name: dbvnprod
     project: HR-prod
@@ -89,4 +97,8 @@ Projects:
   - proj_name: HR-prod
     tag_name1: site=France
     tag_name2: deployment=Production
+    tag_name3: application=HR-HCM
+  - proj_name: HR-dev
+    tag_name1: site=USA
+    tag_name2: deployment=Development
     tag_name3: application=HR-HCM

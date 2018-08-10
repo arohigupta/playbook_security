@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: run_containers.py
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-06T18:42:07-07:00
+# @Last modified time: 2018-08-10T10:54:17-07:00
 import json
 import requests
 import subprocess
@@ -64,4 +64,4 @@ defaults=config_file()
 sorted_order=sorted(defaults, key=lambda k: k['order'])#this ensures db -> app -> web is installed in order.
 for ele in sorted_order:
     send_command(ele['docker'],ele['meta_ip'])
-    time.sleep(10)
+    time.sleep(45)

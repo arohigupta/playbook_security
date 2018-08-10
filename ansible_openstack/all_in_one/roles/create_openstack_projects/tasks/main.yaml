@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: main.yaml
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-10T01:02:16-07:00
+# @Last modified time: 2018-08-10T11:32:36-07:00
 
 ---
 - name: Create a new Projects
@@ -21,6 +21,15 @@
     user: admin
     role: "{{ item }}"
     project: HR-prod
+  with_items:
+    - admin
+    - _member_
+
+- name: Add Roles to the new project
+  os_user_role:
+    user: admin
+    role: "{{ item }}"
+    project: HR-dev
   with_items:
     - admin
     - _member_
@@ -44,10 +53,35 @@
     - ironic-inspector
     - nova
 
+- name: Add Users to the new project HR-prod
+  ignore_errors: yes
+  os_user_role:
+    user: "{{ item }}"
+    role: _member_
+    project: HR-dev
+  with_items:
+    - heat
+    - neutron
+    - placement
+    - ironic
+    - swift
+    - barbican
+    - glance
+    - ironic-inspector
+    - nova
+
 - name: Create a test network.
   os_network:
     auth:
         project_name: HR-prod
     state: present
     name: test
+    external: true
+
+- name: Create a test network.
+  os_network:
+    auth:
+        project_name: HR-dev
+    state: present
+    name: test1
     external: true

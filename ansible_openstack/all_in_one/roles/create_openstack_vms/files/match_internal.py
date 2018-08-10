@@ -2,7 +2,7 @@
 # @Date:   2018-07-19T10:03:34-07:00
 # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-06T11:55:56-07:00
+# @Last modified time: 2018-08-10T11:44:05-07:00
 
 import xml.etree.ElementTree as ET
 import yaml
@@ -44,11 +44,14 @@ def main():
         instances_details=parseoutput(api,instances_details)
         for ele in matcheverything():
             for values in instances_details:
-                if values['vm_name']==ele['name']:
-                    values['docker']=ele['docker']
-                    values['order']=ele['order']
-                    values['repo']=ele['repo']
-                    deets['Details'].append(values)
+                if 'docker' in ele.keys():
+                    if values['vm_name']==ele['name']:
+                        values['docker']=ele['docker']
+                        values['order']=ele['order']
+                        values['repo']=ele['repo']
+                        deets['Details'].append(values)
+                    else:
+                        continue
                 else:
                     continue
         f=open("roles/create_openstack_vms/files/data.yaml",'w')

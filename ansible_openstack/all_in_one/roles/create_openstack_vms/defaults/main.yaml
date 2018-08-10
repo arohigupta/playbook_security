@@ -2,7 +2,7 @@
 # @Date:   2018-07-06T16:12:54-07:00
 # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-09T20:44:58-07:00
+# @Last modified time: 2018-08-10T11:23:42-07:00
 
 hosts:
   - ip: 10.10.16.135
@@ -16,6 +16,11 @@ hosts:
 Image:
   - url: http://10.10.4.253/ubuntuimage.qcow2
     name: ubuntu
+    dest: /tmp/ubuntuimage.qcow2
+    disk_format: qcow2
+
+  - url: http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
+    name: cirros
     dest: /tmp/ubuntuimage.qcow2
     disk_format: qcow2
 
@@ -35,6 +40,12 @@ VM_Data:
     order: 3
     docker: docker run -itd --name web --net=host -e REDMINE_SVC=6.6.6.3 -e REDMINE_SVC_PORT=3000 savvythru/three-tier-proxy
     repo: savvythru/three-tier-proxy
+
+  - name: app_dev
+    project_name: HR-dev
+    net_name: appvndev
+    group: app
+    image: cirros
 
   - name: app_prod
     project_name: HR-prod
