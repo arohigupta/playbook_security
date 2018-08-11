@@ -2,7 +2,7 @@
 # @Date:   2018-07-06T16:12:54-07:00
 # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-10T12:39:33-07:00
+# @Last modified time: 2018-08-11T14:35:06-07:00
 
 hosts:
   - ip: 10.10.16.135
@@ -48,6 +48,7 @@ VM_Data:
     group: web
     image: ubuntu
     flavor: m1.small
+    sg: test_sg
     order: 3
     docker: docker run -itd --name web --net=host -e REDMINE_SVC=6.6.6.3 -e REDMINE_SVC_PORT=3000 savvythru/three-tier-proxy
     repo: savvythru/three-tier-proxy
@@ -57,6 +58,7 @@ VM_Data:
     net_name: appvndev
     flavor: m1.tiny
     group: app
+    sg: test_sg
     image: cirros
 
   - name: app_prod
@@ -65,6 +67,7 @@ VM_Data:
     group: app
     image: ubuntu
     flavor: m1.small
+    sg: test_sg
     order: 2
     docker: docker run -itd --name app --net=host -e REDMINE_DB_MYSQL=7.7.7.3 -e REDMINE_DB_PASSWORD=secret savvythru/three-tier-frontend
     repo: savvythru/three-tier-frontend
@@ -73,6 +76,7 @@ VM_Data:
     net_name: dbvnprod
     group: db
     image: ubuntu
+    sg: test_sg
     flavor: m1.small
     order: 1
     docker: docker run -itd --name database --net=host -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=redmine savvythru/three-tier-database
