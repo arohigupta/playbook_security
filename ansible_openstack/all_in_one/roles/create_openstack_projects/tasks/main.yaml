@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: main.yaml
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-11T14:38:53-07:00
+# @Last modified time: 2018-08-11T14:44:55-07:00
 
 ---
 - name: Create a new Projects
@@ -107,6 +107,7 @@
     security_group: test_sg
     protocol: icmp
     remote_ip_prefix: 0.0.0.0/0
+  with_items: "{{ Projects }}"
 
 - name: Create a test network.
   os_network:

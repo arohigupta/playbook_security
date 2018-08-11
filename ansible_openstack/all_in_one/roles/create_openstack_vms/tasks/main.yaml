@@ -2,7 +2,7 @@
 # @Date:   2018-07-06T15:57:19-07:00
 # @Email:  agupta@juniper.net
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-10T12:05:01-07:00
+# @Last modified time: 2018-08-11T15:12:05-07:00
 
 ---
 #TODO: Uncomment after adding url
@@ -40,6 +40,7 @@
     name: "{{ item.name }}"
     image: "{{item.image}}"
     flavor: "{{item.flavor}}"
+    security_groups: "{{item.sg}}"
     nics:
       - net-name: "{{ item.net_name }}"
       - project-name: "{{ item.project_name }}"
