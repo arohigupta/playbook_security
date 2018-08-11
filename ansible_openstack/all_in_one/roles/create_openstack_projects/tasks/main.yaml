@@ -3,7 +3,7 @@
 # @Email:  agupta@juniper.net
 # @Filename: main.yaml
 # @Last modified by:   agupta
-# @Last modified time: 2018-08-11T14:44:55-07:00
+# @Last modified time: 2018-08-11T15:49:50-07:00
 
 ---
 - name: Create a new Projects
@@ -75,7 +75,7 @@
     auth:
         project_name: "{{item.name}}"
     state: present
-    name: test_sg
+    name: test_sg_"{{item.name}}"
     description: security group to test working
   with_items: "{{ Projects }}"
 - name: Add rules security group..(TCP rule covering all ports)
@@ -83,7 +83,7 @@
   os_security_group_rule:
     auth:
         project_name: "{{item.name}}"
-    security_group: test_sg
+    security_group: test_sg_"{{item.name}}"
     protocol: tcp
     port_range_min: 1
     port_range_max: 65535
@@ -94,7 +94,7 @@
   os_security_group_rule:
     auth:
         project_name: "{{item.name}}"
-    security_group: test_sg
+    security_group: test_sg_"{{item.name}}"
     protocol: udp
     port_range_min: 1
     port_range_max: 65535
@@ -104,7 +104,7 @@
   os_security_group_rule:
     auth:
         project_name: "{{item.name}}"
-    security_group: test_sg
+    security_group: test_sg_"{{item.name}}"
     protocol: icmp
     remote_ip_prefix: 0.0.0.0/0
   with_items: "{{ Projects }}"
