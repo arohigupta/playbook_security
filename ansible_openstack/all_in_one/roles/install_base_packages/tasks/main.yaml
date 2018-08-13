@@ -16,7 +16,3 @@
   pip:
     requirements: /root/requirements.txt
 
-- name: install nano
-  yum:
-    name: nano
-    state: latest
