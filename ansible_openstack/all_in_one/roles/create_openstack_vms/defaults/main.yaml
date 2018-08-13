@@ -1,8 +1,3 @@
-# @Author: Arohi Gupta <agupta>
-# @Date:   2018-07-06T16:12:54-07:00
-# @Email:  agupta@juniper.net
-# @Last modified by:   agupta
-# @Last modified time: 2018-08-11T15:51:20-07:00
 
 hosts:
   - ip: 10.10.16.135
