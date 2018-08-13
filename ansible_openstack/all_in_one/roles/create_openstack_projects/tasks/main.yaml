@@ -46,11 +46,8 @@
     - heat
     - neutron
     - placement
-    - ironic
-    - swift
     - barbican
     - glance
-    - ironic-inspector
     - nova
 
 - name: Add Users to the new project HR-prod
@@ -63,11 +60,8 @@
     - heat
     - neutron
     - placement
-    - ironic
-    - swift
     - barbican
     - glance
-    - ironic-inspector
     - nova
 - name: Create security group in projects
 # Create a security group
