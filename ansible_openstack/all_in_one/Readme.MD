@@ -97,6 +97,7 @@ Check if the web container is running. <br />
 docker ps
 netstat -nlp | grep 80
 ```
+
 Test the app. <br />
 ```
 curl 6.6.6.3:3000 
