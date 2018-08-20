@@ -6,7 +6,7 @@ Note: This procedure follows a specific demo topology and it's encouraged to use
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. This playbook performs the following tasks to demonstrate the functions to contrail security. <br />
-1) Creates two projects and brings up three VMs (web,app,db) with respective containers on both the projects. <br />
+1) Creates two projects and brings up three VMs (web,app,db) with respective containers on both the project HR_prod and a app vm on HR_dev. <br />
 2) It then applies the security polies on the fabric.
 
 ### Prerequisites
@@ -60,8 +60,36 @@ ansible-playbook playbook.yaml
 
 ## Testing the outcome.
 
-Explain what these tests test and why
+The web_prod (5.5.5.3) vm should be able to get data from the db_prod (7.7.7.3) ( vm through the app_prod vm(6.6.6.3) . Also the web_prod vm(5.5.5.3) should not be able to communicate with the app_dev vm(3.3.3.3). <br />
+
+Step1 : Navigate to OpenStack dashboard and select the HR-prod project. <br />
 
 ```
-Give an example
+http://<IP_address>
 ```
+
+![Step1](./image/Picture2.png)
+
+Step 2: Navigate to contrail UI. <br />
+```
+https://<IP_address>:8143
+```
+To take a look at the visualization, select monitor -> security -> traffic groups -> all project<br />
+![Step2](./image/Picture3.png)
+<br />
+![Step4](./image/Picture4.png)
+<br />
+Under “time range” select the value “since” and for “from time” type in “now”. <br />
+
+Step 3: Login into the web_prod VM using the following steps. 
+a.Login to your BMS<br />
+b. ```cat /root/data.yaml```<br />
+c. Look for the `meta_ip` of the `web_prod` vm. <br />
+![Step5](./image/Picture5.png)
+d. SSH using the meta_ip to get into the `web_prod` vm. <br />
+For example: `ssh root@169.254.0.3 `<br />
+Login: root/c0ntrail123<br />
+
+
+
+
