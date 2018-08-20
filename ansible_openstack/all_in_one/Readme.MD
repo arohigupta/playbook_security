@@ -81,7 +81,7 @@ To take a look at the visualization, select monitor -> security -> traffic group
 <br />
 Under “time range” select the value “since” and for “from time” type in “now”. <br />
 
-Step 3: Login into the web_prod VM using the following steps. 
+Step 3: Login into the web_prod VM using the following steps.<br /> 
 a.Login to your BMS<br />
 b. ```cat /root/data.yaml```<br />
 c. Look for the `meta_ip` of the `web_prod` vm. <br />
@@ -90,6 +90,35 @@ d. SSH using the meta_ip to get into the `web_prod` vm. <br />
 For example: `ssh root@169.254.0.3 `<br />
 Login: root/c0ntrail123<br />
 
+<br />
+Step 4: <br />
+Check if the web container is running. <br />
+```
+docker ps
+netstat -nlp | grep 80
+```
+Test the app. <br />
+```
+curl 6.6.6.3:3000 
+ping 3.3.3.3 
+```
+   
+Step 5: Hit refresh and monitor the traffic on contrail ui. <br />
+![Step5](./image/Picture5.png)
+<br />
+![Step5a](./image/Picture6.png)
 
+Step 6: Match on the type of deployment.  <br />
+In the above diagram, web from the production deployment can communicate with the app from the development deployment. We wish to “match tags on deployment type” to stop the communication between them.<br />
+![Step6](./image/Picture7.png)
+![Step6a](./image/Picture8.png)
 
+Step 7: From the OpenStack UI login into web-prod vm and ping the app-dev vm.<br />
 
+Command: `ping 3.3.3.3`<br />
+Result: The ping should fail. <br />
+![Step7](./image/Picture9.png)
+
+Step 8: Go back to the contrail UI. Under traffic groups as mentioned in step 2. Do not re-configure traffic group settings. Just hit refresh.  <br />
+![Step8](./image/Picture10.png)
+![Step8a](./image/Picture11.png)
