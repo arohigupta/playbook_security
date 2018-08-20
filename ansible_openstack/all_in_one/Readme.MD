@@ -16,7 +16,8 @@ Refer the following page to install an all_in_one setup [ansible_deployer](https
 <br />
 2)Here is an example of [instance.yaml](./allinone_instance.yaml)<br />
 
-
+### Topology
+![Topology](./image/picture1.png)
 ### Installing
 
 Clone the repo and edit these configuration files.
