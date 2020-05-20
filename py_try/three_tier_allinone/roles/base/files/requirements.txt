@@ -1,5 +1,5 @@
 ansible==2.4.2.0
-httplib2==0.9.2
+httplib2==0.18.0
 Jinja2==2.10
 jsonpickle==0.9.6
 keystoneauth1==3.9.0
