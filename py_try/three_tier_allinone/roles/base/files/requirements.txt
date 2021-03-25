@@ -13,7 +13,7 @@ python-keystoneclient==3.17.0
 python-linux-procfs==0.4.9
 python-novaclient==10.3.0
 python-openstackclient==3.15.0
-PyYAML==3.12
+PyYAML==5.4
 requests==2.18.4
 requestsexceptions==1.4.0
 rfc3986==1.1.0
